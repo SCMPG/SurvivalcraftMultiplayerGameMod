@@ -1,10 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net48</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="DLL\1.33\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Comms">
+      <HintPath>DLL\1.33\Comms.dll</HintPath>
+    </Reference>
+    <Reference Include="Engine">
+      <HintPath>DLL\1.33\Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="EntitySystem">
+      <HintPath>DLL\1.33\EntitySystem.dll</HintPath>
+    </Reference>
+    <Reference Include="Survivalcraft">
+      <HintPath>DLL\1.33\Survivalcraft.exe</HintPath>
+    </Reference>
+  </ItemGroup>
 
 </Project>
