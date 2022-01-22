@@ -19,20 +19,16 @@ namespace SCMPG
             Initialize += SCMPGC.Func3;
             SCMPGManager.Initialize?.Invoke();
         }
-
-        
     }
     public class SCMPGC {
         public static void Func1()
         {
             Log.Information("111");
-            var fieldInfo = typeof(ScreensManager).GetField("m_screens", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
-            //((Dictionary<string, Screen>)fieldInfo.GetValue(null))["Player"] = new SCMPGPlayerScreen(); ;
-            //var c = (Dictionary<string, Screen>)fieldInfo.GetValue(null);
-            //var c = Game.ScreensManager.m_screens;
-            Game.ScreensManager.m_screens["Player"]= new SCMPGPlayerScreen();
-          //  Log.Information();
-          //  c["Play"] = new NewWorldScreen();
+            Game.ScreensManager.FindScreen<LoadingScreen>("Loading").AddLoadAction(delegate {
+                Game.ScreensManager.m_screens["Player"] = new SCMPGPlayerScreen();
+                Game.ScreensManager.m_screens["Play"] = new SCMPGPlayScreen();
+                Game.ScreensManager.m_screens["Game"] = new SCMPGGameScreen();
+            });
         }
         public static void Func2()
         {
@@ -62,3 +58,11 @@ namespace SCMPG
         }
     }
 }
+
+// var fieldInfo = typeof(ScreensManager).GetField("m_screens", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
+//((Dictionary<string, Screen>)fieldInfo.GetValue(null))["Player"] = new SCMPGPlayerScreen(); ;
+//var c = (Dictionary<string, Screen>)fieldInfo.GetValue(null);
+//var c = Game.ScreensManager.m_screens;
+
+//  Log.Information();
+//  c["Play"] = new NewWorldScreen();
