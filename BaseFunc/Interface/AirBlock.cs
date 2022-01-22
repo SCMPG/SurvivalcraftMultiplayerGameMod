@@ -19,6 +19,8 @@ namespace SCMPG
             Initialize += SCMPGC.Func3;
             SCMPGManager.Initialize?.Invoke();
         }
+
+        
     }
     public class SCMPGC {
         public static void Func1()
