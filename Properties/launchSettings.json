@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SCMPG": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

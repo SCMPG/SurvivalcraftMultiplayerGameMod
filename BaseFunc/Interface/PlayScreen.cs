@@ -22,6 +22,12 @@ namespace SCMPG
         public override void Enter(object[] parameters) { 
         base.Enter(parameters);
             Log.Information("Loading PlayScreen");
+            var a = new GameListMessage {
+            ServerPriority=110,
+                ServerName="CN.01"
+            };
+           Log.Information((Message.Read( Message.Write(a)) as GameListMessage).ServerName);
+
         }
         public override void Update()
         {
