@@ -1,7 +1,8 @@
 {
   "profiles": {
-    "SCMPG": {
-      "commandName": "Project",
+    "配置文件 1": {
+      "commandName": "Executable",
+      "executablePath": "D:\\Game\\Survivalcraft.exe",
       "nativeDebugging": true
     }
   }
