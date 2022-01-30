@@ -24,7 +24,7 @@ namespace SCMPG
             RemoveGameIL();
             Log.Information("Loading PlayScreen");
 
-            WorldInfo WorldInfo = new WorldInfo {
+            /*WorldInfo WorldInfo = new WorldInfo {
                 DirectoryName = "SSSL",
                 LastSaveTime = DateTime.Now,
                 Size = 1,
@@ -33,17 +33,9 @@ namespace SCMPG
                 WorldSettings = new WorldSettings()
             };
             List<WorldInfo> worldInfos = new List<WorldInfo>(WorldsManager.WorldInfos);
-            WorldsManager.m_worldInfos.Add(WorldInfo);
+            WorldsManager.m_worldInfos.Add(WorldInfo);*/
             
-
-
-
-
-            var a = new GameListMessage {
-            ServerPriority=110,
-                ServerName="CN.01"
-            };
-           Log.Information((Message.Read( Message.Write(a)) as GameListMessage).ServerName);
+            ServersManager.StartServerDiscovery();
         }
         public override void Update()
         {
@@ -52,6 +44,7 @@ namespace SCMPG
                 Log.Information("UpLoad World");
                 //(WorldInfo)m_worldsListWidget.SelectedItem;
             }
+            ServersManager.Update();
             base.Update();
         }
         private void RemoveGameIL() {

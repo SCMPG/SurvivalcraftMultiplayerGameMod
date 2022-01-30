@@ -24,6 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="BaseFunc\NetMod\Server.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="DLL\1.33\" />
   </ItemGroup>
 

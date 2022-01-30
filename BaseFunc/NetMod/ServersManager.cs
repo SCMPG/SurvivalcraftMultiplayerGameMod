@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 namespace SCMPG
 {
     //@
-    internal static class ServersManager
+    public static class ServersManager
     {
-        private static string[] ServerNames = new string[4]
+        private static string[] ServerNames = new string[]
         {
-            "ruthlessconquest.kaalus.com",
+            /*"ruthlessconquest.kaalus.com",
             "ruthlessconquest1.kaalus.com",
             "ruthlessconquest2.kaalus.com",
-            "ruthlessconquest3.kaalus.com"
+            "ruthlessconquest3.kaalus.com"*/
         };
 
         private static Peer Peer;
@@ -46,7 +46,7 @@ namespace SCMPG
 
         public static ReadOnlyList<ServerDescription> DiscoveredServers => new ReadOnlyList<ServerDescription>(InternalDiscoveredServers);
 
-        public static Version? NewVersionServerDiscovered
+        public static Version NewVersionServerDiscovered
         {
             get;
             private set;
@@ -167,23 +167,13 @@ namespace SCMPG
             };
             Peer.PeerDiscovered += delegate (Packet p)
             {
-                if (p.Data.Length >= 5 && p.Data[0] == 0)
-                {
-                    Version version = new Version(BitConverter.ToInt32(p.Data, 1));
-                    if (version.GetNetworkProtocolVersion() > VersionsManager.Version.GetNetworkProtocolVersion() && (!NewVersionServerDiscovered.HasValue || version > NewVersionServerDiscovered.Value))
-                    {
-                        NewVersionServerDiscovered = version;
-                    }
-                }
-                else
-                {
+                
                     if (!(Message.Read(p.Data) is GameListMessage gameListMessage))
                     {
                         throw new InvalidOperationException("Unrecognized message.");
                     }
 
                     Handle(gameListMessage, p.Address);
-                }
             };
         }
 
@@ -204,7 +194,7 @@ namespace SCMPG
             if (Peer != null)
             {
                 //saomiao40102端口
-                Peer.DiscoverLocalPeers(40102, VersionsManager.Version.ToByteArray());
+                Peer.DiscoverLocalPeers(40102);
                 GameListLocalRequestTime = Time.RealTime;
             }
         }
@@ -218,45 +208,31 @@ namespace SCMPG
 
             foreach (IPEndPoint address in addresses)
             {
-                Peer.DiscoverPeer(address, VersionsManager.Version.ToByteArray());
+                Peer.DiscoverPeer(address);
                 GameListRequestTimes[address] = Time.RealTime;
             }
         }
 
         private static void Handle(GameListMessage message, IPEndPoint address)
         {
-            bool isLocal = false;
-            float ping = float.PositiveInfinity;
-            if (GameListRequestTimes.TryGetValue(address, out double value))
+           // Game.WorldsManager.m_worldInfos.Add(message.WorldInfo);
+            Log.Information(message.ServerName);
+            Log.Information(message.ServerPriority);
+            foreach (var item in message.WorldInfo)
             {
-                ping = (float)(Time.RealTime - value);
-                isLocal = false;
+                Log.Information(item.Value.DirectoryName);
             }
-            else if (GameListLocalRequestTime != 0.0)
+           
+            if (!ServerAddresses.Contains(address))
             {
-                ping = (float)(Time.RealTime - GameListLocalRequestTime);
-                isLocal = true;
+                ServerAddresses.Add(address);
             }
-
-            Dispatcher.Dispatch(delegate
+            foreach (var item in ServerAddresses)
             {
-                InternalDiscoveredServers.RemoveAll((ServerDescription sd) => object.Equals(sd.Address, address));
-                ServerDescription discoveredServer = new ServerDescription
-                {
-                    Address = address,
-                    IsLocal = isLocal,
-                    DiscoveryTime = Time.RealTime,
-                    Ping = ping,
-                    Priority = message.ServerPriority,
-                    Name = message.ServerName
-                };
-                discoveredServer.GameDescriptions.AddRange(message.GameDescriptions.Select(delegate (GameDescription gd)
-                {
-                    gd.ServerDescription = discoveredServer;
-                    return gd;
-                }));
-                InternalDiscoveredServers.Add(discoveredServer);
-            });
+                
+                Log.Information(item.ToString());
+            }
+            
         }
     }
 }
